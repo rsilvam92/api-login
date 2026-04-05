@@ -5,6 +5,8 @@ import com.sena.api_usuarios.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -40,5 +42,42 @@ public class UserService {
 
         // Si no cumple, retorna null
         return null;
+    }
+
+    // Obtener todos los usuarios
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    // Obtener usuario por ID
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    // Actualizar usuario
+    public User updateUser(Long id, User user) {
+
+        User existingUser = userRepository.findById(id).orElse(null);
+
+        if (existingUser != null) {
+            existingUser.setUsername(user.getUsername());
+            existingUser.setPassword(user.getPassword());
+            return userRepository.save(existingUser);
+        }
+
+        return null;
+    }
+
+    // Eliminar usuario
+    public boolean deleteUser(Long id) {
+
+        User existingUser = userRepository.findById(id).orElse(null);
+
+        if (existingUser != null) {
+            userRepository.delete(existingUser);
+            return true;
+        }
+
+        return false;
     }
 }
